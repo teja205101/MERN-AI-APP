@@ -19,6 +19,7 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "bun-react-template": ".",
+    "concurrently": "^9.2.1",
     "vite": "^8.0.3"
   },
   "workspaces": [
