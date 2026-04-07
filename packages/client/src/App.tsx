@@ -1,5 +1,5 @@
 import './index.css';
-// import { Button } from "@/components/ui/button";
+// import { Button } from "@/components/ui/button"
 import { CircleFadingArrowUpIcon } from 'lucide-react';
 
 function App() {
