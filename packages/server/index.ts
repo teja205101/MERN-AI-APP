@@ -20,7 +20,8 @@ app.get('/', (req: Request, res: Response) => {
    );
 });
 
-let lastResponseId: string | null = null;
+// let lastResponseId: string | null = null;
+//  conversationId -> lastResponseId
 const conversations = new Map<string, string>();
 
 app.post('/api/chat', async (req: Request, res: Response) => {
@@ -31,10 +32,13 @@ app.post('/api/chat', async (req: Request, res: Response) => {
       input: prompt,
       temperature: 0.3,
       max_output_tokens: 100,
+      // previous_response_id: lastResponseId,
       previous_response_id: conversations.get(conversationId),
    });
 
    conversations.set(conversationId, response.id);
+
+   // lastResponseId = response.id;
 
    res.json({ message: response.output_text });
 });
