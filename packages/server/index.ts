@@ -2,6 +2,11 @@ import express from 'express';
 import type { Request, Response } from 'express';
 import dotenv from 'dotenv';
 import OpenAI from 'openai';
+import z from 'zod';
+import {
+   getLastResponseId,
+   setLastResponseId,
+} from './repositories/conversation.repository';
 
 dotenv.config();
 
@@ -20,27 +25,42 @@ app.get('/', (req: Request, res: Response) => {
    );
 });
 
-// let lastResponseId: string | null = null;
-//  conversationId -> lastResponseId
-const conversations = new Map<string, string>();
+const chatSchema = z.object({
+   prompt: z
+      .string()
+      .trim()
+      .min(1, 'Prompt is required.')
+      .max(1000, 'prompt is too long please try to keep under 1000 charcters.'),
+   conversationId: z.string(),
+   // .uuid(),
+});
 
 app.post('/api/chat', async (req: Request, res: Response) => {
-   const { prompt, conversationId } = req.body;
+   const parseResult = chatSchema.safeParse(req.body);
 
-   const response = await client.responses.create({
-      model: 'gpt-4o-mini',
-      input: prompt,
-      temperature: 0.3,
-      max_output_tokens: 100,
-      // previous_response_id: lastResponseId,
-      previous_response_id: conversations.get(conversationId),
-   });
+   if (!parseResult.success) {
+      res.status(400).json(parseResult.error.format());
+      return;
+   }
 
-   conversations.set(conversationId, response.id);
+   try {
+      const { prompt, conversationId } = req.body;
 
-   // lastResponseId = response.id;
+      const response = await client.responses.create({
+         model: 'gpt-4o-mini',
+         input: prompt,
+         temperature: 0.3,
+         max_output_tokens: 100,
+         previous_response_id: getLastResponseId(conversationId),
+      });
 
-   res.json({ message: response.output_text });
+      setLastResponseId(conversationId, response.id);
+      res.json({ message: response.output_text });
+   } catch (error) {
+      res.status(500).json({
+         error: 'Failed to generate a response.',
+      });
+   }
 });
 
 app.listen(port, () => {
