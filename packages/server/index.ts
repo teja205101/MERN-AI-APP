@@ -58,7 +58,7 @@ app.post('/api/chat', async (req: Request, res: Response) => {
       res.json({ message: response.output_text });
    } catch (error) {
       res.status(500).json({
-         error: 'Failed to generate a response.',
+         error: `Failed to generate a response bcz of ${error}`,
       });
    }
 });

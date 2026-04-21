@@ -1,1 +1,4 @@
-node_modules/.bin/lint-staged
+#!/usr/bin/env sh
+
+# Force native arm64 execution to avoid Rosetta hook crashes.
+exec arch -arm64 /usr/local/bin/node ./node_modules/lint-staged/bin/lint-staged.js
