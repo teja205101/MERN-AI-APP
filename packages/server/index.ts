@@ -3,10 +3,7 @@ import type { Request, Response } from 'express';
 import dotenv from 'dotenv';
 import OpenAI from 'openai';
 import z from 'zod';
-import {
-   getLastResponseId,
-   setLastResponseId,
-} from './repositories/conversation.repository';
+import { connverstaionRepository } from './repositories/conversation.repository';
 
 dotenv.config();
 
@@ -51,10 +48,11 @@ app.post('/api/chat', async (req: Request, res: Response) => {
          input: prompt,
          temperature: 0.3,
          max_output_tokens: 100,
-         previous_response_id: getLastResponseId(conversationId),
+         previous_response_id:
+            connverstaionRepository.getLastResponseId(conversationId),
       });
 
-      setLastResponseId(conversationId, response.id);
+      connverstaionRepository.setLastResponseId(conversationId, response.id);
       res.json({ message: response.output_text });
    } catch (error) {
       res.status(500).json({
