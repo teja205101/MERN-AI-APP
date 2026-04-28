@@ -12,14 +12,18 @@ interface ChatResponse {
    message: string;
 }
 
+interface Message {
+   content: string;
+   role: 'user' | 'bot';
+}
+
 export const ChatBot = () => {
-   const [messages, setMessages] = useState<string[]>([]);
+   const [messages, setMessages] = useState<Message[]>([]);
    const conversationId = useRef(crypto.randomUUID());
    const { register, handleSubmit, reset, formState } = useForm<FormData>();
 
    const onSubmit = async ({ prompt }: FormData) => {
-      setMessages((prev) => [...prev, prompt]);
-      console.log('messages 1st-->', messages);
+      setMessages((prev) => [...prev, { content: prompt, role: 'user' }]);
 
       reset();
 
@@ -28,8 +32,7 @@ export const ChatBot = () => {
          conversationId: conversationId.current,
       });
 
-      console.log('messages 2nd-->', messages);
-      setMessages((prev) => [...prev, data.message]);
+      setMessages((prev) => [...prev, { content: data.message, role: 'bot' }]);
    };
 
    const onKeyDown = (e: KeyboardEvent<HTMLFormElement>) => {
@@ -41,9 +44,18 @@ export const ChatBot = () => {
 
    return (
       <div>
-         <div>
+         <div className="flex flex-col gap-3">
             {messages.map((message, index) => (
-               <p key={index}>{message}</p>
+               <p
+                  key={index}
+                  className={` px-3 py-1 rounded-xl ${
+                     message.role === 'user'
+                        ? 'bg-blue-600 text-white self-end'
+                        : 'bg-orange-300 self-start'
+                  }`}
+               >
+                  {message.content}
+               </p>
             ))}
          </div>
          <form
