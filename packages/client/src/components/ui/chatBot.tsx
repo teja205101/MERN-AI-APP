@@ -44,7 +44,7 @@ export const ChatBot = () => {
 
    return (
       <div>
-         <div className="flex flex-col gap-3">
+         <div className="flex flex-col gap-3 mb-3">
             {messages.map((message, index) => (
                <p
                   key={index}
@@ -68,7 +68,7 @@ export const ChatBot = () => {
                   required: true,
                   validate: (data) => data.trim().length > 0,
                })}
-               className="w-full border focus:outline-0 resize-none"
+               className="w-full focus:outline-0 resize-none"
                placeholder="Let's chat"
             />
             <button
