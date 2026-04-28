@@ -11,9 +11,11 @@
     "prepare": "husky"
   },
   "dependencies": {
+    "axios": "^1.15.2",
     "bun-plugin-tailwind": "^0.1.2",
     "react": "^19",
     "react-dom": "^19",
+    "react-hook-form": "^7.73.1",
     "tailwindcss": "^4.1.11",
     "uuid": "^13.0.0",
     "zod": "^4.3.6"

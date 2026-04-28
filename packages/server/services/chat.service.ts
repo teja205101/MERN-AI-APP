@@ -28,6 +28,6 @@ export const chatService = {
 
       connverstaionRepository.setLastResponseId(conversationId, response.id);
 
-      return { id: response.id, message: response.output_text };
+      return { Id: response.id, message: response.output_text };
    },
 };
