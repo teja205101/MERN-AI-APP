@@ -1,5 +1,6 @@
 import { CircleArrowRight } from 'lucide-react';
 import { useForm } from 'react-hook-form';
+import ReactMarkdown from 'react-markdown';
 import axios from 'axios';
 import { useRef, useState } from 'react';
 import type { KeyboardEvent } from 'react';
@@ -54,7 +55,7 @@ export const ChatBot = () => {
                         : 'bg-orange-300 self-start'
                   }`}
                >
-                  {message.content}
+                  <ReactMarkdown>{message.content}</ReactMarkdown>
                </p>
             ))}
          </div>
