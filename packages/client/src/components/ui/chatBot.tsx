@@ -2,7 +2,7 @@ import { CircleArrowRight } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import ReactMarkdown from 'react-markdown';
 import axios from 'axios';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { KeyboardEvent } from 'react';
 
 type FormData = {
@@ -23,6 +23,11 @@ export const ChatBot = () => {
    const [isBotTyping, setIsBotTyping] = useState(false);
    const conversationId = useRef(crypto.randomUUID());
    const { register, handleSubmit, reset, formState } = useForm<FormData>();
+   const formRef = useRef<HTMLFormElement | null>(null);
+
+   useEffect(() => {
+      formRef.current?.scrollIntoView({ behavior: 'smooth' });
+   });
 
    const onSubmit = async ({ prompt }: FormData) => {
       setMessages((prev) => [...prev, { content: prompt, role: 'user' }]);
@@ -72,6 +77,7 @@ export const ChatBot = () => {
          <form
             onSubmit={handleSubmit(onSubmit)}
             onKeyDown={onKeyDown}
+            ref={formRef}
             className="flex flex-col gap-2 items-end border-2 p-4 rounded-3xl"
          >
             <textarea
