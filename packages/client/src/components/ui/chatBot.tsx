@@ -27,7 +27,7 @@ export const ChatBot = () => {
 
    useEffect(() => {
       formRef.current?.scrollIntoView({ behavior: 'smooth' });
-   });
+   }, [messages]);
 
    const onSubmit = async ({ prompt }: FormData) => {
       setMessages((prev) => [...prev, { content: prompt, role: 'user' }]);
